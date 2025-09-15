@@ -13,7 +13,7 @@ public class EntryPoint : MonoBehaviour {
             spawner.Init(monstersService);
         }
 
-        var towers = FindObjectsByType<CannonTower>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+        var towers = FindObjectsByType<AbstractTower>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
         foreach (var tower in towers) {
             tower.Init(monstersService);
         }

@@ -1,19 +1,25 @@
 ﻿using UnityEngine;
 
 public class GuidedProjectile : MonoBehaviour {
-    public GameObject m_target;
-    public float m_speed = 0.2f;
-    public int m_damage = 10;
+    private GameObject _target;
+    private float _speed = 0.2f;
+    private int _damage = 10;
+
+    public void Init(GameObject target, float speed, int damage) {
+        _target = target;
+        _speed = speed;
+        _damage = damage;
+    }
 
     void Update() {
-        if (m_target == null) {
+        if (_target == null) {
             Destroy(gameObject);
             return;
         }
 
-        var translation = m_target.transform.position - transform.position;
-        if (translation.magnitude > m_speed) {
-            translation = translation.normalized * m_speed;
+        var translation = _target.transform.position - transform.position;
+        if (translation.magnitude > _speed * Time.deltaTime) {
+            translation = translation.normalized * _speed * Time.deltaTime;
         }
 
         transform.Translate(translation);
@@ -24,7 +30,7 @@ public class GuidedProjectile : MonoBehaviour {
         if (monster == null)
             return;
 
-        monster.TakeDamage(m_damage);
+        monster.TakeDamage(_damage);
         Destroy(gameObject);
     }
 }

@@ -31,31 +31,34 @@ public class CannonTower : AbstractTower {
 
         var monstersInRange = _monstersService.ActiveMonsters.Where(CheckInRange);
         foreach (var monster in monstersInRange) {
-            if (LeadingShot.TryGetInterceptDirection(_shootPoint.position, monster.transform.position, monster.DirectionalSpeed,
+            if (!LeadingShot.TryGetInterceptDirection(_shootPoint.position, monster.transform.position, monster.DirectionalSpeed,
                     _config.ProjectileSpeed, _config.Gravity, out Vector3 shootDir)) {
-                if (!CanRotateToTarget(shootDir)) {
-                    Debug.Log("Can't rotate there");
-                    continue;
-                }
-
-                RotateToTarget(shootDir);
-
-                if (_lastShotTime + _config.ShootInterval > Time.time)
-                    return;
-
-                if (Vector3.Angle(_cannonHead.forward, shootDir) > _config.AngleDiffToShoot) {
-                    return;
-                }
-
-                // shot
-                var proj = Instantiate(_projectilePrefab, _shootPoint.position, _shootPoint.rotation);
-                proj.Init(shootDir, _config.ProjectileDamage, _config.Gravity);
-                _lastShotTime = Time.time;
-                break;
-            } else {
-                Debug.Log("Cant hit");
+                continue;
             }
+
+            if (!CanRotateToTarget(shootDir)) {
+                continue;
+            }
+
+            RotateToTarget(shootDir);
+
+            if (_lastShotTime + _config.ShootInterval > Time.time)
+                return;
+
+            if (Vector3.Angle(_cannonHead.forward, shootDir) > _config.AngleDiffToShoot) {
+                return;
+            }
+
+            // shot
+            ShootMonster(shootDir);
+            break;
         }
+    }
+
+    private void ShootMonster(Vector3 shootDir) {
+        var proj = Instantiate(_projectilePrefab, _shootPoint.position, _shootPoint.rotation);
+        proj.Init(shootDir, _config.ProjectileDamage, _config.Gravity);
+        _lastShotTime = Time.time;
     }
 
     private bool CanRotateToTarget(Vector3 shootDir) {
@@ -65,7 +68,7 @@ public class CannonTower : AbstractTower {
         float horizontalAngle = Vector3.SignedAngle(hubForwardFlat, flatDir, Vector3.up);
         if (Mathf.Abs(horizontalAngle) > _config.MaxHorizontalAngle) return false;
 
-// вертикальный угол
+        // вертикальный угол
         float distance = flatDir.magnitude;
         if (distance < 0.001f) return false; // цель прямо над башней
         float targetPitch = Mathf.Atan2(shootDir.y, distance) * Mathf.Rad2Deg;
