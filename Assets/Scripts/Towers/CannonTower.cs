@@ -12,6 +12,13 @@ public class CannonTower : MonoBehaviour {
 
     private float m_lastShotTime = -0.5f;
 
+    [SerializeField]
+    private float _verticalSpeed = 5;
+
+    private float _gravity = 0.01f;
+    
+    
+
     void Update() {
         if (m_projectilePrefab == null || m_shootPoint == null)
             return;
@@ -24,16 +31,19 @@ public class CannonTower : MonoBehaviour {
                 continue;
 
             if (LeadingShot.TryGetInterceptDirection(m_shootPoint.position, monster.transform.position, monster.DirectionalSpeed,
-                    m_projectilePrefab.m_speed, out Vector3 shootDir)) {
+                    m_projectilePrefab.m_speed, _gravity, out Vector3 shootDir, out float verticalSpeed, out float time)) {
+                shootDir *= m_projectilePrefab.m_speed;
+                shootDir.y = verticalSpeed;
+
                 m_shootPoint.forward = shootDir;
                 /*
                 _cannonHub.localRotation = Quaternion.Euler(0, m_shootPoint.localRotation.eulerAngles.y, 0);
                 _cannonHead.localRotation = Quaternion.Euler(m_shootPoint.localRotation.eulerAngles.x, 0, 0);*/
                 _cannonHead.forward = shootDir;
-                
+
                 // shot
                 var proj = Instantiate(m_projectilePrefab, m_shootPoint.position, m_shootPoint.rotation);
-                proj.transform.forward = shootDir;
+                proj.Init(shootDir, verticalSpeed, _gravity);
             }
 
             m_lastShotTime = Time.time;

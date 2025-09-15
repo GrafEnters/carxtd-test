@@ -16,6 +16,7 @@ public class Monster : MonoBehaviour {
     public Vector3 DirectionalSpeed => (_moveTarget.transform.position - transform.position).normalized * _speed;
 
     public void Init(MonsterConfig config, Action<Monster> releaseCallback) {
+        gameObject.layer = LayerMask.NameToLayer("Enemy");
         _maxHp = config.MaxHp;
         _speed = config.Speed;
         GetComponent<MeshRenderer>().material.color = config.Color;
