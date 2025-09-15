@@ -4,10 +4,12 @@ using UnityEngine;
 public class MonstersService {
     public readonly List<Monster> ActiveMonsters;
 
+    public MonsterSpawningConfig MonsterSpawningConfig;
     private List<MonsterConfig> _monsterConfigs = new List<MonsterConfig>();
 
     public MonstersService(ConfigsProvider configsProvider) {
         _monsterConfigs = configsProvider.MonstersConfigs;
+        MonsterSpawningConfig = configsProvider.MonsterSpawningConfig;
         ActiveMonsters = new List<Monster>();
     }
 

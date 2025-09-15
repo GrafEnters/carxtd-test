@@ -1,31 +1,33 @@
 ﻿using UnityEngine;
 
 public class MonsterSpawnPoint : MonoBehaviour {
-    public float m_interval = 3;
-    public GameObject m_moveTarget;
+    [SerializeField]
+    private GameObject _moveTarget;
 
-    private float m_lastSpawn = -1;
+    private float _lastSpawn = -1;
 
     private MonstersService _monstersService;
+    private MonsterSpawningConfig _config;
 
     public void Init(MonstersService monstersService) {
         _monstersService = monstersService;
+        _config = monstersService.MonsterSpawningConfig;
     }
 
     void Update() {
-        if (!(Time.time > m_lastSpawn + m_interval)) {
+        if (!(Time.time > _lastSpawn + _config.Interval)) {
             return;
         }
 
         SpawnMonster();
 
-        m_lastSpawn = Time.time;
+        _lastSpawn = Time.time;
     }
 
     private void SpawnMonster() {
         Monster monster = _monstersService.GetRandomMonster();
         monster.transform.position = transform.position;
-        monster.SetTarget(m_moveTarget);
+        monster.SetTarget(_moveTarget);
         monster.transform.SetParent(transform);
     }
 }
