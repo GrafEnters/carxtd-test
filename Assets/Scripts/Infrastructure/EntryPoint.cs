@@ -12,5 +12,10 @@ public class EntryPoint : MonoBehaviour {
         foreach (var spawner in spawners) {
             spawner.Init(monstersService);
         }
+
+        var towers = FindObjectsByType<CannonTower>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+        foreach (var tower in towers) {
+            tower.Init(monstersService);
+        }
     }
 }

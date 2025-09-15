@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class SimpleTower : MonoBehaviour {
+public class SimpleTower : AbstractTower {
 	public float m_shootInterval = 0.5f;
 	public float m_range = 4f;
 	public GameObject m_projectilePrefab;
