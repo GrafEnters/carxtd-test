@@ -9,6 +9,7 @@ public class CannonProjectile : MonoBehaviour {
         _speedV = direction;
         _gravity = gravity;
         _damage = damage;
+        Destroy(gameObject, 10);
     }
 
     void Update() {
