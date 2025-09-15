@@ -44,8 +44,8 @@ public class Monster : MonoBehaviour {
 
     private void MoveToTarget() {
         var translation = _moveTarget.transform.position - transform.position;
-        if (translation.magnitude > _speed) {
-            translation = translation.normalized * _speed;
+        if (translation.magnitude > _speed * Time.deltaTime) {
+            translation = translation.normalized * _speed* Time.deltaTime;
         }
 
         transform.Translate(translation);

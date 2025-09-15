@@ -4,12 +4,10 @@ public static class LeadingShot {
     public static bool TryGetInterceptDirection(Vector3 shooterPos, Vector3 targetPos, Vector3 targetVel,
         float projectileSpeedXZ, // скорость в плоскости XZ
         float gravity, // положительное число
-        out Vector3 shootV, out float verticalSpeed, // сюда вернём рассчитанный v_y
-        out float timeToHit) // сюда вернём время перехвата
+        out Vector3 shootV) // сюда вернём время перехвата
     {
         shootV = Vector3.zero;
-        verticalSpeed = 0f;
-        timeToHit = 0f;
+        float verticalSpeed = 0f;
 
         // --- Решаем по XZ ---
         Vector2 rXZ = new Vector2(targetPos.x - shooterPos.x, targetPos.z - shooterPos.z);
@@ -37,7 +35,6 @@ public static class LeadingShot {
         shootV = (aimPoint - shooterPos).normalized;
         shootV *= projectileSpeedXZ;
         shootV.y = verticalSpeed;
-        timeToHit = t;
         return true;
     }
 
