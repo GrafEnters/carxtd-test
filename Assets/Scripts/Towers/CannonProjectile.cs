@@ -6,8 +6,7 @@ public class CannonProjectile : MonoBehaviour {
     public int m_damage = 10;
 
     void Update() {
-        var translation = transform.forward * m_speed;
-        transform.Translate(translation);
+        transform.position += transform.forward * m_speed;
     }
 
     void OnTriggerEnter(Collider other) {

@@ -26,5 +26,6 @@ public class MonsterSpawnPoint : MonoBehaviour {
         Monster monster = _monstersService.GetRandomMonster();
         monster.transform.position = transform.position;
         monster.SetTarget(m_moveTarget);
+        monster.transform.SetParent(transform);
     }
 }

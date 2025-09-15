@@ -13,6 +13,8 @@ public class Monster : MonoBehaviour {
     private int _hp;
     private Action<Monster> _releaseMonster;
 
+    public Vector3 DirectionalSpeed => (_moveTarget.transform.position - transform.position).normalized * _speed;
+
     public void Init(MonsterConfig config, Action<Monster> releaseCallback) {
         _maxHp = config.MaxHp;
         _speed = config.Speed;
