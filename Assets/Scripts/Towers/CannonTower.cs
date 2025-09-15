@@ -83,12 +83,14 @@ public class CannonTower : AbstractTower {
         }
 
         // --- горизонтальный поворот базы ---
-        Vector3 flatDir = new Vector3(shootDir.x, 0f, shootDir.z);
-        if (flatDir.sqrMagnitude > 0.0001f) {
-            Quaternion targetHubRot = Quaternion.LookRotation(flatDir, Vector3.up);
-            float maxDelta = _config.HorRotationSpeed * Time.deltaTime;
-            _cannonHub.localRotation = Quaternion.RotateTowards(_cannonHub.localRotation, targetHubRot, maxDelta);
-        }
+       
+        Vector3 flatDir = Vector3.ProjectOnPlane(shootDir, Vector3.up);
+        Vector3 hubForwardFlat = Vector3.ProjectOnPlane(_initialHubForward, Vector3.up);
+
+        float signedAngle = Vector3.SignedAngle(hubForwardFlat, flatDir, Vector3.up);
+        float clampedAngle = Mathf.Clamp(signedAngle, -_config.MaxHorizontalAngle, _config.MaxHorizontalAngle);
+        Quaternion targetHubRot = Quaternion.AngleAxis(clampedAngle, Vector3.up) * Quaternion.LookRotation(_initialHubForward, Vector3.up);
+        _cannonHub.rotation = Quaternion.RotateTowards(_cannonHub.rotation, targetHubRot, _config.HorRotationSpeed * Time.deltaTime * 360f);
 
         // --- вертикальный поворот дуло ---
         Vector3 localDir = _cannonHub.InverseTransformDirection(shootDir);
